@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZX Spectrum Program in JS</title>
+  <style>
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // Set up the canvas
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800; // Adjust size as needed
+    canvas.height = 400;
+    
+    // Define constants
+    const BORDER_COLOR = 'blue'; // Equivalent of BORDER 1
+    const u = 10;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    // Set background color
+    ctx.fillStyle = BORDER_COLOR;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Plot function
+    function plot(x, y) {
+      const size = 1; // Point size
+      ctx.fillStyle = 'white';
+      ctx.fillRect(x, y, size, size);
+    }
+
+    // Main logic
+    for (let a = -99; a <= 99; a++) {
+      let q = 0;
+
+      // Calculate the maximum vertical value for the current 'a'
+      const k = u * Math.floor(Math.sqrt(10000 - a * a) / u);
+
+      for (let t = k; t >= -k; t -= u) {
+        // Calculate screen coordinates
+        const s = Math.floor(
+          80 + 30 * Math.sin(Math.sqrt(a * a + t * t) / 12) - 0.7 * t
+        );
+
+        if (s < q) continue;
+
+        q = s;
+
+        // Convert logical coordinates to canvas coordinates
+        const x = Math.floor(centerX + a);
+        const y = Math.floor(centerY - (s - 15));
+        plot(x, y);
+      }
+    }
+  </script>
+</body>
+</html>
